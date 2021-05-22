@@ -9,7 +9,6 @@ import cv2
 from sklearn.mixture import GaussianMixture
 from roipoly import RoiPoly
 
-# 输入的是Mask包括前景和背景
 def GMMdistribution(I, Mfore, Mback):
     Mfore = np.uint8(Mfore)*127
     Mback = np.uint8(Mback)*255
@@ -40,7 +39,7 @@ bProb): #  Mask with size equal to I (M*N,1)
 
     # t-links
     maxWeights_t = 1e6
-    g,pic = maxflow.Graph[int](M*N,2*M*N),maxflow.Graph[int]() # define the graph
+    g = maxflow.Graph[int](M*N,2*M*N) # define the graph
     g.add_nodes(M*N)
     for i in range(0,M):
         for j in range(0,N):
@@ -128,7 +127,6 @@ Fg_gmm, Bg_gmm = GMMdistribution(I, mask_fore, mask_back)
 labels,flow = graph(I, mask_fore, mask_back, 20, 20, Fg_gmm, Bg_gmm )
 labels = 1-labels
 
-# mask_overlay = cv2.fillPoly(labels,)
 plt.imshow(labels)
 plt.title('mask result')
 plt.show()
@@ -143,5 +141,3 @@ I = cv2.addWeighted(I,0.7,mask,0.7,0)
 plt.imshow(I)
 plt.title('final segmentaion result')
 plt.show()
-
-print('finished')
